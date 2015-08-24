@@ -6,5 +6,4 @@ To run this example:
 2. `npm start`
 3. open http://localhost:3000/ in the browser
 
-GeoJSON data is from 
-http://www.geoforall.org/locations/OSGEoLabs.json
+The server supports hot reloading while keeping the application state.
