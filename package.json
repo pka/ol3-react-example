@@ -1,0 +1,34 @@
+{
+  "name": "ol3-react-example",
+  "version": "0.0.0",
+  "description": "Basic ol3 + react example",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pka/ol3-react-example.git"
+  },
+  "keywords": [
+    "redux",
+    "react"
+  ],
+  "author": "Pirmin Kalberer",
+  "license": "ISC",
+  "bugs": {
+        "url": "https://github.com/pka/ol3-react-example/issues"
+  },
+  "homepage": "https://github.com/pka/ol3-react-example#readme",
+  "dependencies": {
+    "react": "^0.13.3",
+    "react-redux": "^0.5.0",
+    "redux": "^1.0.0-rc"
+  },
+  "devDependencies": {
+    "react-hot-loader": "^1.2.7",
+    "jsx-loader": "^0.13.2",
+    "webpack": "^1.9.11",
+    "webpack-dev-server": "^1.9.0"
+  }
+}
