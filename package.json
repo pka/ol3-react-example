@@ -29,6 +29,8 @@
   "devDependencies": {
     "react-hot-loader": "^1.2.7",
     "jsx-loader": "^0.13.2",
+    "style-loader": "^0.12.0",
+    "css-loader": "^0.16.0",
     "webpack": "^1.9.11",
     "webpack-dev-server": "^1.9.0"
   }

@@ -5,6 +5,7 @@ var ReactRedux = require('react-redux');
 var createStore = Redux.createStore;
 var Provider = ReactRedux.Provider;
 var connect = ReactRedux.connect;
+require("./popup.css");
 
 
 var placeLayer = new ol.layer.Vector({

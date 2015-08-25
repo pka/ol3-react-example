@@ -22,6 +22,8 @@ module.exports = {
       loaders: ['react-hot', 'jsx-loader'],
       exclude: /node_modules/,
       include: __dirname
-    }]
+    },
+    { test: /\.css$/, loader: "style-loader!css-loader" }
+    ]
   }
 };
