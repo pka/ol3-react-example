@@ -30,6 +30,16 @@ map = new ol.Map({
   })
 });
 
+popupElement = document.getElementById('popup');
+var popup = new ol.Overlay({
+  element: popupElement,
+  autoPan: true,
+  autoPanAnimation: {
+    duration: 250
+  }
+});
+map.addOverlay(popup);
+
 
 // React component
 var PlaceList = React.createClass( {
@@ -96,7 +106,8 @@ function mapDispatchToProps(dispatch) {
   return {
     onSelectClick: function(e) {
       name = e.dispatchMarker.split('$')[1];
-      dispatch(selectAction(name))
+      dispatch(selectAction(name));
+      updateSelection(name)
     }
   };
 }
@@ -126,6 +137,19 @@ function updateVisiblePlaces() {
 }
 placeLayer.on('change', updateVisiblePlaces);
 map.on('moveend', updateVisiblePlaces);
+
+function updateSelection(place) {
+  var extent = map.getView().calculateExtent(map.getSize());
+  var selected = placeLayer.getSource().getFeaturesInExtent(extent).filter(function(feature) {
+    var name = feature.getProperties().name.replace(/<(?:.|\n)*?>/g, '');
+    return place == name;
+  });
+  if (selected.length > 0) {
+    feature = selected[0];
+    popupElement.innerHTML = feature.getProperties().name;
+    popup.setPosition(feature.getGeometry().getFirstCoordinate());
+  }
+}
 
 
 module.exports = PlaceList;
