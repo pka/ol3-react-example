@@ -1,3 +1,4 @@
+var ol = require('openlayers');
 var React = require('react');
 var Redux = require('redux');
 var ReactRedux = require('react-redux');
@@ -35,6 +36,30 @@ var places = [
   { "name": "<a href=\"http:\/\/spatialquerylab.com\/projects\/open-source-gis\/\" class=\"external text\" rel=\"nofollow\" target=\"_blank\">Spatial {Query} Lab at Texas A&amp;M University - Corpus Christi<\/a>", "time": "2013-09-09" },
   { "name": "<a href=\"http:\/\/karlinapp.ethz.ch\/osgl\/\" class=\"external text\" rel=\"nofollow\" target=\"_blank\">ETH Zurich<\/a>", "time": "2013-09-20" }
 ]
+
+var placeLayer = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    format: new ol.format.GeoJSON(),
+    //url: "http://www.geoforall.org/locations/OSGEoLabs.json" raises
+    //Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://www.geoforall.org/locations/OSGEoLabs.json. (Reason: CORS header 'Access-Control-Allow-Origin' missing).
+    url: "OSGEoLabs.json"
+  })
+});
+
+map = new ol.Map({
+  target: 'map',
+  layers: [
+    new ol.layer.Tile({
+      source: new ol.source.OSM()
+    }),
+    placeLayer
+  ],
+  view: new ol.View({
+    center: [949282, 6002552],
+    zoom: 4
+  })
+});
+
 
 // React component
 var PlaceList = React.createClass( {

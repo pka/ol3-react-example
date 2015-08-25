@@ -1,13 +1,16 @@
 <html>
-	<head>
-		<title>Basic ol3 + react example</title>
-        <style>
-            li:hover { background-color: yellow; }
-            li.selected { background-color: orange; }
-        </style>
-	</head>
-	<body>
-		<div id="root" />
-		<script type="text/javascript" src="bundle.js"></script>
-	</body>
+  <head>
+    <title>Basic ol3 + react example</title>
+    <link rel="stylesheet" href="node_modules/openlayers/css/ol.css"></link>
+    <style>
+      .map { height: 400px; }
+      li:hover { background-color: yellow; }
+      li.selected { background-color: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <div id="root" />
+    <script type="text/javascript" src="bundle.js"></script>
+  </body>
 </html>
