@@ -15,7 +15,7 @@
     "react"
   ],
   "author": "Pirmin Kalberer",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
         "url": "https://github.com/pka/ol3-react-example/issues"
   },
