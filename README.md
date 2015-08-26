@@ -1,4 +1,12 @@
+# OpenLayer 3 React example
+
 Basic example for using [OpenLayers 3](http://openlayers.org/) with [React](http://facebook.github.io/react/) and [Redux](http://rackt.github.io/redux/)
+
+## Demo
+
+[Demo](https://rawgit.com/pka/ol3-react-example/master/index.html)
+
+## Development
 
 To run this example:
 
