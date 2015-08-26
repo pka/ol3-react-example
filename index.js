@@ -2,14 +2,16 @@ var ol = require('openlayers');
 var React = require('react');
 var Redux = require('redux');
 var ReactRedux = require('react-redux');
+
+require("openlayers/css/ol.css");
+require("./popup.css");
+
 var createStore = Redux.createStore;
 var Provider = ReactRedux.Provider;
 var connect = ReactRedux.connect;
 
-require("openlayers/css//ol.css");
-require("./popup.css");
 
-
+// OL map
 var placeLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     format: new ol.format.GeoJSON(),
@@ -43,17 +45,44 @@ var popup = new ol.Overlay({
 });
 map.addOverlay(popup);
 
+function placeName(place) {
+    // extract text from link
+    return place.name.replace(/<(?:.|\n)*?>/g, '');
+}
+
+// OL callbacks
+function updateVisiblePlaces() {
+  var extent = map.getView().calculateExtent(map.getSize());
+  var places = placeLayer.getSource().getFeaturesInExtent(extent).map(function(feature) {
+    return feature.getProperties();
+  });
+  // Update state in Redux store
+  store.dispatch(visiblePlacesAction(places))
+}
+placeLayer.on('change', updateVisiblePlaces);
+map.on('moveend', updateVisiblePlaces);
+
+function updateSelection(name) {
+  var extent = map.getView().calculateExtent(map.getSize());
+  var selected = placeLayer.getSource().getFeaturesInExtent(extent).filter(function(feature) {
+    return name == placeName(feature.getProperties());
+  });
+  if (selected.length > 0) {
+    feature = selected[0];
+    popupElement.innerHTML = feature.getProperties().name;
+    popup.setPosition(feature.getGeometry().getFirstCoordinate());
+  }
+}
 
 // React component
 var PlaceList = React.createClass( {
   render: function() {
     var onSelectClick = this.props.onSelectClick;
     var selected = this.props.selected;
-    var createItem = function(place, index) {
-      // extract link text
-      var name = place.name.replace(/<(?:.|\n)*?>/g, '');
-      var selclass = (name==selected) ? 'selected' : '';
-      return <li key={name} className={selclass} onClick={onSelectClick}>{name}</li>;
+    var createItem = function(place) {
+      var name = placeName(place);
+      var selClass = (name == selected) ? 'selected' : '';
+      return <li key={name} className={selClass} onClick={onSelectClick}>{name}</li>;
     };
     return (
       <ul>
@@ -71,23 +100,23 @@ function visiblePlacesAction(places) {
   };
 }
 
-function selectAction(place) {
+function selectAction(placeName) {
   return {
     type: 'select',
-    place: place
+    placeName: placeName
   };
 }
 
 // Reducer:
 function placeSelector(state, action) {
   if (typeof state === 'undefined') {
-    state = {places: [], selected: []};
+    state = {places: [], selected: null};
   }
   switch(action.type){
     case 'visible':
       return {places: action.places, selected: state.selected};
     case 'select':
-      return {places: state.places, selected: action.place};
+      return {places: state.places, selected: action.placeName};
     default:
       return state;
   }
@@ -110,6 +139,7 @@ function mapDispatchToProps(dispatch) {
     onSelectClick: function(e) {
       name = e.dispatchMarker.split('$')[1];
       dispatch(selectAction(name));
+      // Update map
       updateSelection(name)
     }
   };
@@ -124,35 +154,11 @@ var App = connect(
 React.render(
   React.createElement(Provider, {store: store}, 
     function(){
-      return React.createElement(App, null)
+      return (<App/>)
     }
   ),
   document.getElementById('root')
 );
-
-// OL callbacks
-function updateVisiblePlaces() {
-  var extent = map.getView().calculateExtent(map.getSize());
-  var places = placeLayer.getSource().getFeaturesInExtent(extent).map(function(feature) {
-    return feature.getProperties();
-  });
-  store.dispatch(visiblePlacesAction(places))
-}
-placeLayer.on('change', updateVisiblePlaces);
-map.on('moveend', updateVisiblePlaces);
-
-function updateSelection(place) {
-  var extent = map.getView().calculateExtent(map.getSize());
-  var selected = placeLayer.getSource().getFeaturesInExtent(extent).filter(function(feature) {
-    var name = feature.getProperties().name.replace(/<(?:.|\n)*?>/g, '');
-    return place == name;
-  });
-  if (selected.length > 0) {
-    feature = selected[0];
-    popupElement.innerHTML = feature.getProperties().name;
-    popup.setPosition(feature.getGeometry().getFirstCoordinate());
-  }
-}
 
 
 module.exports = PlaceList;
