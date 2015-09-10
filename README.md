@@ -4,7 +4,8 @@ Basic example for using [OpenLayers 3](http://openlayers.org/) with [React](http
 
 ## Demo
 
-[Demo](https://rawgit.com/pka/ol3-react-example/master/index.html)
+Clone or download the repository and open [index.html](index.html) in a browser or [view the example on RawGit](https://rawgit.com/pka/ol3-react-example/master/index.html).
+
 
 ## Development
 
